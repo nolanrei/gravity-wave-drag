@@ -6,8 +6,18 @@ using FFTW
 filename = "/scratch/nr2489/riceWRF_3km/wrfout_d01_2016-08-02_00:15:00.nc"
 
 zb = 10 # z batch size
-zmax = shape(ncread(filename,"U",start=[1,1,1,1],count=[1,1,-1,1]),3)
+zmax = size(ncread(filename,"U",start=[1,1,1,1],count=[1,1,-1,1]),3)
 
+nx = size(v_raw)[1]
+ny = size(w_raw)[2]
+nz = size(u_raw)[3]
+n2x = div(nx,2)+1
+xx = reshape((0.5/nx):1/nx:(1-0.5/nx), (nx,1))
+xs = 0:1/nx:1
+yy = reshape((0.5/ny):1/ny:(1-0.5/ny), (1,ny))
+ys = 0:1/ny:1
+ll = (0.5/nz):1/nz:(1-0.5/nz)
+ls = 0:1/nz:1
 function fw(x, L)
     if x < 0
         return 0.0
@@ -84,16 +94,6 @@ for zm = 1:zb:zmax
     #println("Finished reading in data")
 
     # Linearly interpolate onto shared non-staggered grid
-    nx = size(v_raw)[1]
-    ny = size(w_raw)[2]
-    nz = size(u_raw)[3]
-    n2x = div(nx,2)+1
-    xx = reshape((0.5/nx):1/nx:(1-0.5/nx), (nx,1))
-    xs = 0:1/nx:1
-    yy = reshape((0.5/ny):1/ny:(1-0.5/ny), (1,ny))
-    ys = 0:1/ny:1
-    ll = (0.5/nz):1/nz:(1-0.5/nz)
-    ls = 0:1/nz:1
     U = 0.5*(u_raw[2:nx+1,:,:]+u_raw[1:nx,:,:])
     u_raw = nothing
     V = 0.5*(v_raw[:,2:ny+1,:]+v_raw[:,1:ny,:])
