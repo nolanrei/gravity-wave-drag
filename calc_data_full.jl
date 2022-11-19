@@ -180,7 +180,7 @@ for zm = 1:zb:zmax
     #println("Finished windowing")
 
     # High-pass filter
-    Lhi = 2000          # filter wavelength in km
+    Lhi = 1000          # filter wavelength in km
     Lx = nx*3           # width of domain in x
     Ly = ny*3           # width of domain in y
     uf = U; vf = V; wf = W
