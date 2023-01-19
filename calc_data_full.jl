@@ -84,7 +84,7 @@ function low_pass!(f, Lx, Ly, Llo)
         for y = 1:ny
             ky = (mod(y-1+ny/2,ny)-ny/2)
             # Gaussian filter
-            ff[x,y,:] .*= sqrt(pi/Lx/Ly)*Llo*exp(-0.25*((Llo/Lx*kx)^2+(Llo/Ly*ky)^2))
+            ff[x,y,:] .*= exp(-0.25*((Llo/Lx*kx)^2+(Llo/Ly*ky)^2))
             # Spectral boxcar
             #ff[x,y,:] .*= (hypot(kx/Lx, ky/Ly) > pi/Llo ? 0.0 : 1.0)
         end
